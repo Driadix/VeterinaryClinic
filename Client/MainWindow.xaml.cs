@@ -1,24 +1,30 @@
-﻿using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Client.Services;
 
 namespace Client
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly ApiClientService _apiService;
+
         public MainWindow()
         {
             InitializeComponent();
+            _apiService = new ApiClientService();
+        }
+
+        private async void LoadClientsButton_Click(object sender, RoutedEventArgs e)
+        {
+            var clients = await _apiService.GetClientsAsync();
+
+            if (clients != null)
+            {
+                ClientsListView.ItemsSource = clients;
+            }
+            else
+            {
+                MessageBox.Show("Не удалось загрузить данные с сервера.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
