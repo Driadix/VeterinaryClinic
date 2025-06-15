@@ -21,5 +21,11 @@
         /// Предоставляет репозиторий для работы с записями на прием.
         /// </summary>
         IRepository<Core.Models.Appointment> GetAppointmentRepository();
+
+        /// <summary>
+        /// Асинхронно сохраняет все отслеженные изменения в базе данных.
+        /// </summary>
+        /// <returns>Количество измененных записей.</returns>
+        Task<int> SaveChangesAsync();
     }
 }
