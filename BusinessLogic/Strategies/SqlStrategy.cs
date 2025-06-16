@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces;
 using Core.Models;
+using DataAccess.Repositories.Sql;
 using Microsoft.Extensions.Configuration;
 using VeterinaryClinic.DataAccess.Repositories.Sql;
 
@@ -19,15 +20,19 @@ public class SqlStrategy : IDataAccessStrategy
     {
         return new ClientSqlRepository(_connectionString);
     }
+    public IRepository<Pet> GetPetRepository()
+    {
+        return new PetSqlRepository(_connectionString);
+    }
 
+    public IRepository<Appointment> GetAppointmentRepository()
+    {
+        return new AppointmentSqlRepository(_connectionString);
+    }
     public IRepository<User> GetUserRepository() => throw new NotImplementedException();
-    public IRepository<Pet> GetPetRepository() => throw new NotImplementedException();
-    public IRepository<Appointment> GetAppointmentRepository() => throw new NotImplementedException();
 
     public Task<int> SaveChangesAsync()
     {
-        // В подходе с чистым SQL каждая операция не требует общего SaveChanges.
-        // Возвращаем 1 для имитации успешного выполнения.
         return Task.FromResult(1);
     }
 }
