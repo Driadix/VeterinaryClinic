@@ -66,4 +66,29 @@ clientApi.MapDelete("/{id}", async (int id, ClinicService clinicService) =>
     return Results.NoContent();
 });
 
+var petApi = app.MapGroup("/api/pets");
+
+// GET /api/pets/client/{clientId}
+petApi.MapGet("/client/{clientId}", async (int clientId, ClinicService clinicService) =>
+    Results.Ok(await clinicService.GetPetsForClientAsync(clientId)));
+
+// POST /api/pets
+petApi.MapPost("/", async (Pet newPet, ClinicService clinicService) =>
+{
+    await clinicService.AddPetAsync(newPet);
+    return Results.Created($"/api/pets/{newPet.Id}", newPet);
+});
+
+// PUT /api/pets/{id}
+petApi.MapPut("/{id}", async (int id, Pet updatedPet, ClinicService clinicService) =>
+{
+    if (id != updatedPet.Id) return Results.BadRequest("ID mismatch.");
+    var success = await clinicService.UpdatePetAsync(updatedPet);
+    return success ? Results.NoContent() : Results.NotFound();
+});
+
+// DELETE /api/pets/{id}
+petApi.MapDelete("/{id}", async (int id, ClinicService clinicService) =>
+    await clinicService.DeletePetAsync(id) ? Results.NoContent() : Results.NotFound());
+
 app.Run();

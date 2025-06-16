@@ -1,0 +1,33 @@
+﻿<Window x:Class="Client.PetEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Редактор питомца" Height="250" Width="400"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <Label Content="Кличка:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="NameTextBox" Grid.Row="0" Grid.Column="1" Margin="5"/>
+
+        <Label Content="Вид:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="SpeciesTextBox" Grid.Row="1" Grid.Column="1" Margin="5"/>
+
+        <Label Content="Порода:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+        <TextBox x:Name="BreedTextBox" Grid.Row="2" Grid.Column="1" Margin="5"/>
+
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="SaveButton" Content="Сохранить" Width="100" Height="30" IsDefault="True" Click="SaveButton_Click"/>
+            <Button x:Name="CancelButton" Content="Отмена" Width="100" Height="30" Margin="10,0,0,0" IsCancel="True"/>
+        </StackPanel>
+    </Grid>
+</Window>

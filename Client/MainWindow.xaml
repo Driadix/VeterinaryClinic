@@ -5,31 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="АИС 'Ветеринарная клиника'" Height="450" Width="800"
+        Title="АИС 'Ветеринарная клиника'" Height="500" Width="900"
         Loaded="Window_Loaded">
     <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <Button x:Name="LoadClientsButton" Content="Обновить список" Width="120" Height="30" Click="LoadClientsButton_Click"/>
-            <Button x:Name="AddClientButton" Content="Добавить клиента" Width="120" Height="30" Margin="5,0,0,0" Click="AddClientButton_Click"/>
-            <Button x:Name="EditClientButton" Content="Редактировать" Width="120" Height="30" Margin="5,0,0,0" Click="EditClientButton_Click"/>
-            <Button x:Name="DeleteClientButton" Content="Удалить" Width="120" Height="30" Margin="5,0,0,0" Click="DeleteClientButton_Click"/>
-        </StackPanel>
+        <!-- Панель для Клиентов -->
+        <DockPanel Grid.Column="0">
+            <TextBlock Text="Клиенты" DockPanel.Dock="Top" FontSize="16" FontWeight="Bold" Margin="0,0,0,5"/>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+                <Button x:Name="AddClientButton" Content="Добавить" Width="90" Click="AddClientButton_Click"/>
+                <Button x:Name="EditClientButton" Content="Изменить" Width="90" Margin="5,0,0,0" Click="EditClientButton_Click"/>
+                <Button x:Name="DeleteClientButton" Content="Удалить" Width="90" Margin="5,0,0,0" Click="DeleteClientButton_Click"/>
+            </StackPanel>
+            <ListView x:Name="ClientsListView" SelectionMode="Single" SelectionChanged="ClientsListView_SelectionChanged">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="ФИО" Width="250" DisplayMemberBinding="{Binding FullName}"/>
+                        <GridViewColumn Header="Телефон" Width="150" DisplayMemberBinding="{Binding PhoneNumber}"/>
+                        <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding Email}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
 
-        <ListView x:Name="ClientsListView" Grid.Row="1" SelectionMode="Single">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
-                    <GridViewColumn Header="ФИО" Width="250" DisplayMemberBinding="{Binding FullName}"/>
-                    <GridViewColumn Header="Телефон" Width="150" DisplayMemberBinding="{Binding PhoneNumber}"/>
-                    <GridViewColumn Header="Email" Width="200" DisplayMemberBinding="{Binding Email}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
 
+        <!-- Панель для Питомцев -->
+        <DockPanel Grid.Column="2">
+            <TextBlock Text="Питомцы" DockPanel.Dock="Top" FontSize="16" FontWeight="Bold" Margin="0,0,0,5"/>
+            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,10">
+                <Button x:Name="AddPetButton" Content="Добавить" Width="90" Click="AddPetButton_Click"/>
+                <Button x:Name="EditPetButton" Content="Изменить" Width="90" Margin="5,0,0,0" Click="EditPetButton_Click"/>
+                <Button x:Name="DeletePetButton" Content="Удалить" Width="90" Margin="5,0,0,0" Click="DeletePetButton_Click"/>
+            </StackPanel>
+            <ListView x:Name="PetsListView" SelectionMode="Single">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="ID" Width="40" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="Кличка" Width="120" DisplayMemberBinding="{Binding Name}"/>
+                        <GridViewColumn Header="Вид" Width="100" DisplayMemberBinding="{Binding Species}"/>
+                        <GridViewColumn Header="Порода" Width="120" DisplayMemberBinding="{Binding Breed}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </DockPanel>
     </Grid>
 </Window>

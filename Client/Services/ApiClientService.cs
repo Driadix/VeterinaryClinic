@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 
 using ClientModel = Core.Models.Client;
+using PetModel = Core.Models.Pet;
 
 namespace Client.Services
 {
@@ -43,6 +44,31 @@ namespace Client.Services
         public async Task DeleteClientAsync(int clientId)
         {
             await httpClient.DeleteAsync($"/api/clients/{clientId}");
+        }
+
+        public async Task<IEnumerable<PetModel>?> GetPetsForClientAsync(int clientId)
+        {
+            try
+            {
+                return await httpClient.GetFromJsonAsync<IEnumerable<PetModel>>($"/api/pets/client/{clientId}");
+            }
+            catch (HttpRequestException ex) { System.Diagnostics.Debug.WriteLine(ex.Message); return null; }
+        }
+
+        public async Task<PetModel?> AddPetAsync(PetModel pet)
+        {
+            var response = await httpClient.PostAsJsonAsync("/api/pets", pet);
+            return await response.Content.ReadFromJsonAsync<PetModel>();
+        }
+
+        public async Task UpdatePetAsync(PetModel pet)
+        {
+            await httpClient.PutAsJsonAsync($"/api/pets/{pet.Id}", pet);
+        }
+
+        public async Task DeletePetAsync(int petId)
+        {
+            await httpClient.DeleteAsync($"/api/pets/{petId}");
         }
     }
 }
