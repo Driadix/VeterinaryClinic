@@ -3,7 +3,7 @@ using BusinessLogic.Strategies;
 using Core.Interfaces;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
-using Core.Models;
+using Server.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,71 +24,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var clientApi = app.MapGroup("/api/clients");
-
-// GET /api/clients
-clientApi.MapGet("/", async (ClinicService clinicService) => Results.Ok(await clinicService.GetAllClientsAsync()));
-
-// GET /api/clients/{id}
-clientApi.MapGet("/{id}", async (int id, ClinicService clinicService) =>
-{
-    var client = await clinicService.GetClientByIdAsync(id);
-    return client != null ? Results.Ok(client) : Results.NotFound();
-});
-
-// POST /api/clients
-clientApi.MapPost("/", async (Client newClient, ClinicService clinicService) =>
-{
-    await clinicService.AddClientAsync(newClient);
-    return Results.Created($"/api/clients/{newClient.Id}", newClient);
-});
-
-// PUT /api/clients/{id}
-clientApi.MapPut("/{id}", async (int id, Client updatedClient, ClinicService clinicService) =>
-{
-    if (id != updatedClient.Id) return Results.BadRequest("ID mismatch.");
-
-    var success = await clinicService.UpdateClientAsync(updatedClient);
-
-    return success ? Results.NoContent() : Results.NotFound();
-});
-
-// DELETE /api/clients/{id}
-clientApi.MapDelete("/{id}", async (int id, ClinicService clinicService) =>
-{
-    var existingClient = await clinicService.GetClientByIdAsync(id);
-    if (existingClient is null)
-    {
-        return Results.NotFound();
-    }
-
-    await clinicService.DeleteClientAsync(id);
-    return Results.NoContent();
-});
-
-var petApi = app.MapGroup("/api/pets");
-
-// GET /api/pets/client/{clientId}
-petApi.MapGet("/client/{clientId}", async (int clientId, ClinicService clinicService) =>
-    Results.Ok(await clinicService.GetPetsForClientAsync(clientId)));
-
-// POST /api/pets
-petApi.MapPost("/", async (Pet newPet, ClinicService clinicService) =>
-{
-    await clinicService.AddPetAsync(newPet);
-    return Results.Created($"/api/pets/{newPet.Id}", newPet);
-});
-
-// PUT /api/pets/{id}
-petApi.MapPut("/{id}", async (int id, Pet updatedPet, ClinicService clinicService) =>
-{
-    if (id != updatedPet.Id) return Results.BadRequest("ID mismatch.");
-    var success = await clinicService.UpdatePetAsync(updatedPet);
-    return success ? Results.NoContent() : Results.NotFound();
-});
-
-// DELETE /api/pets/{id}
-petApi.MapDelete("/{id}", async (int id, ClinicService clinicService) =>
-    await clinicService.DeletePetAsync(id) ? Results.NoContent() : Results.NotFound());
+app.MapClientEndpoints();
+app.MapPetEndpoints();
 
 app.Run();

@@ -25,10 +25,10 @@
             <ListView x:Name="ClientsListView" SelectionMode="Single" SelectionChanged="ClientsListView_SelectionChanged">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>
-                        <GridViewColumn Header="ФИО" Width="250" DisplayMemberBinding="{Binding FullName}"/>
-                        <GridViewColumn Header="Телефон" Width="150" DisplayMemberBinding="{Binding PhoneNumber}"/>
-                        <GridViewColumn Header="Email" Width="150" DisplayMemberBinding="{Binding Email}"/>
+                        <GridViewColumn Header="ID" Width="40" DisplayMemberBinding="{Binding Id}"/>
+                        <GridViewColumn Header="ФИО" Width="150" DisplayMemberBinding="{Binding FullName}"/>
+                        <GridViewColumn Header="Телефон" Width="100" DisplayMemberBinding="{Binding PhoneNumber}"/>
+                        <GridViewColumn Header="Email" Width="100" DisplayMemberBinding="{Binding Email}"/>
                     </GridView>
                 </ListView.View>
             </ListView>
