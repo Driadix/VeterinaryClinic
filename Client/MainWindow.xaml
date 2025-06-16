@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="АИС 'Ветеринарная клиника'" Height="450" Width="800">
+        Title="АИС 'Ветеринарная клиника'" Height="450" Width="800"
+        Loaded="Window_Loaded">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -13,10 +14,13 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-            <Button x:Name="LoadClientsButton" Content="Загрузить клиентов" Width="150" Height="30" Click="LoadClientsButton_Click"/>
+            <Button x:Name="LoadClientsButton" Content="Обновить список" Width="120" Height="30" Click="LoadClientsButton_Click"/>
+            <Button x:Name="AddClientButton" Content="Добавить клиента" Width="120" Height="30" Margin="5,0,0,0" Click="AddClientButton_Click"/>
+            <Button x:Name="EditClientButton" Content="Редактировать" Width="120" Height="30" Margin="5,0,0,0" Click="EditClientButton_Click"/>
+            <Button x:Name="DeleteClientButton" Content="Удалить" Width="120" Height="30" Margin="5,0,0,0" Click="DeleteClientButton_Click"/>
         </StackPanel>
 
-        <ListView x:Name="ClientsListView" Grid.Row="1">
+        <ListView x:Name="ClientsListView" Grid.Row="1" SelectionMode="Single">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" Width="50" DisplayMemberBinding="{Binding Id}"/>

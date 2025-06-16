@@ -20,21 +20,29 @@ namespace Client.Services
             }
         }
 
-        /// <summary>
-        /// Асинхронно получает список всех клиентов с сервера.
-        /// </summary>
-        /// <returns>Коллекция клиентов или null в случае ошибки.</returns>
         public async Task<IEnumerable<ClientModel>?> GetClientsAsync()
         {
             try
             {
                 return await httpClient.GetFromJsonAsync<IEnumerable<ClientModel>>("/api/clients");
             }
-            catch (HttpRequestException ex)
-            {
-                System.Diagnostics.Debug.WriteLine($"Ошибка API запроса: {ex.Message}");
-                return null;
-            }
+            catch (HttpRequestException ex) { System.Diagnostics.Debug.WriteLine(ex.Message); return null; }
+        }
+
+        public async Task<ClientModel?> AddClientAsync(ClientModel client)
+        {
+            var response = await httpClient.PostAsJsonAsync("/api/clients", client);
+            return await response.Content.ReadFromJsonAsync<ClientModel>();
+        }
+
+        public async Task UpdateClientAsync(ClientModel client)
+        {
+            await httpClient.PutAsJsonAsync($"/api/clients/{client.Id}", client);
+        }
+
+        public async Task DeleteClientAsync(int clientId)
+        {
+            await httpClient.DeleteAsync($"/api/clients/{clientId}");
         }
     }
 }

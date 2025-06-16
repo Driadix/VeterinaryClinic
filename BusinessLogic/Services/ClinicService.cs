@@ -12,10 +12,21 @@ namespace BusinessLogic.Services
             _strategy = strategy;
         }
 
-        /// <summary>
-        /// Регистрирует нового клиента в системе.
-        /// </summary>
-        public async Task RegisterClientAsync(Client newClient)
+        #region Client Management
+
+        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        {
+            var clientRepository = _strategy.GetClientRepository();
+            return await clientRepository.GetAllAsync();
+        }
+
+        public async Task<Client?> GetClientByIdAsync(int id)
+        {
+            var clientRepository = _strategy.GetClientRepository();
+            return await clientRepository.GetByIdAsync(id);
+        }
+
+        public async Task AddClientAsync(Client newClient)
         {
             if (newClient == null)
             {
@@ -27,13 +38,37 @@ namespace BusinessLogic.Services
             await _strategy.SaveChangesAsync();
         }
 
-        /// <summary>
-        /// Получает список всех клиентов.
-        /// </summary>
-        public async Task<IEnumerable<Client>> GetAllClientsAsync()
+        public async Task<bool> UpdateClientAsync(Client clientToUpdate)
         {
             var clientRepository = _strategy.GetClientRepository();
-            return await clientRepository.GetAllAsync();
+
+            var existingClient = await clientRepository.GetByIdAsync(clientToUpdate.Id);
+
+            if (existingClient == null)
+            {
+                return false;
+            }
+
+            existingClient.FullName = clientToUpdate.FullName;
+            existingClient.PhoneNumber = clientToUpdate.PhoneNumber;
+            existingClient.Email = clientToUpdate.Email;
+
+            await _strategy.SaveChangesAsync();
+            return true;
         }
+
+        public async Task DeleteClientAsync(int id)
+        {
+            var clientRepository = _strategy.GetClientRepository();
+            var clientToDelete = await clientRepository.GetByIdAsync(id);
+
+            if (clientToDelete != null)
+            {
+                clientRepository.Delete(clientToDelete);
+                await _strategy.SaveChangesAsync();
+            }
+        }
+
+        #endregion
     }
 }
