@@ -20,6 +20,6 @@
         /// <summary>
         /// Навигационное свойство для связи с записями на прием.
         /// </summary>
-        public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+        public ICollection<Appointment>? Appointments { get; set; } = new List<Appointment>();
     }
 }

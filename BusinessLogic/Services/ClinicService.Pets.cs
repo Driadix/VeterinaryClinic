@@ -6,6 +6,11 @@ public partial class ClinicService
 {
     #region Pet Management
 
+    public async Task<IEnumerable<Pet>> GetAllPetsAsync()
+    {
+        return await _strategy.GetPetRepository().GetAllAsync();
+    }
+
     public async Task<IEnumerable<Pet>> GetPetsForClientAsync(int clientId)
     {
         return await _strategy.GetPetRepository().FindAsync(p => p.ClientId == clientId);

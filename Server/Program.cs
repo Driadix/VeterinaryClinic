@@ -26,5 +26,7 @@ if (app.Environment.IsDevelopment())
 
 app.MapClientEndpoints();
 app.MapPetEndpoints();
+app.MapAppointmentEndpoints();
+app.MapUserEndpoints();
 
 app.Run();

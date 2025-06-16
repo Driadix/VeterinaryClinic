@@ -3,6 +3,8 @@ using System.Net.Http.Json;
 
 using ClientModel = Core.Models.Client;
 using PetModel = Core.Models.Pet;
+using AppointmentModel = Core.Models.Appointment;
+using UserModel = Core.Models.User;
 
 namespace Client.Services
 {
@@ -46,6 +48,15 @@ namespace Client.Services
             await httpClient.DeleteAsync($"/api/clients/{clientId}");
         }
 
+        public async Task<IEnumerable<PetModel>?> GetAllPetsAsync()
+        {
+            try
+            {
+                return await httpClient.GetFromJsonAsync<IEnumerable<PetModel>>("/api/pets");
+            }
+            catch (HttpRequestException ex) { System.Diagnostics.Debug.WriteLine(ex.Message); return null; }
+        }
+
         public async Task<IEnumerable<PetModel>?> GetPetsForClientAsync(int clientId)
         {
             try
@@ -69,6 +80,45 @@ namespace Client.Services
         public async Task DeletePetAsync(int petId)
         {
             await httpClient.DeleteAsync($"/api/pets/{petId}");
+        }
+
+        public async Task<IEnumerable<AppointmentModel>?> GetAppointmentsAsync()
+        {
+            try { return await httpClient.GetFromJsonAsync<IEnumerable<AppointmentModel>>("/api/appointments"); }
+            catch (HttpRequestException ex) { System.Diagnostics.Debug.WriteLine(ex.Message); return null; }
+        }
+
+        public async Task<AppointmentModel?> AddAppointmentAsync(AppointmentModel appointment)
+        {
+            var response = await httpClient.PostAsJsonAsync("/api/appointments", appointment);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await response.Content.ReadFromJsonAsync<AppointmentModel>();
+            }
+
+            var errorContent = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"API Error: {errorContent}");
+            return null;
+        }
+
+        public async Task UpdateAppointmentAsync(AppointmentModel appointment)
+        {
+            await httpClient.PutAsJsonAsync($"/api/appointments/{appointment.Id}", appointment);
+        }
+
+        public async Task DeleteAppointmentAsync(int appointmentId)
+        {
+            await httpClient.DeleteAsync($"/api/appointments/{appointmentId}");
+        }
+
+        public async Task<IEnumerable<UserModel>?> GetUsersAsync()
+        {
+            try
+            {
+                return await httpClient.GetFromJsonAsync<IEnumerable<UserModel>>("/api/users");
+            }
+            catch (HttpRequestException ex) { System.Diagnostics.Debug.WriteLine(ex.Message); return null; }
         }
     }
 }

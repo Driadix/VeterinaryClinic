@@ -9,6 +9,9 @@ public static class PetEndpoints
     {
         var petApi = app.MapGroup("/api/pets");
 
+        petApi.MapGet("/", async (ClinicService clinicService) =>
+            Results.Ok(await clinicService.GetAllPetsAsync()));
+
         petApi.MapGet("/client/{clientId}", async (int clientId, ClinicService clinicService) =>
             Results.Ok(await clinicService.GetPetsForClientAsync(clientId)));
 

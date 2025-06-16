@@ -1,14 +1,21 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using Client.Services;
 using ClientModel = Core.Models.Client;
 using PetModel = Core.Models.Pet;
+using AppointmentModel = Core.Models.Appointment;
+using UserModel = Core.Models.User;
 
 namespace Client
 {
     public partial class MainWindow : Window
     {
         private readonly ApiClientService _apiService;
+        private IEnumerable<PetModel> _allPetsCache = new List<PetModel>();
+        private IEnumerable<UserModel> _allUsersCache = new List<UserModel>();
 
         public MainWindow()
         {
@@ -17,7 +24,15 @@ namespace Client
         }
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            await RefreshAllData();
+        }
+
+        private async Task RefreshAllData()
+        {
             await RefreshClientsList();
+            await RefreshAppointmentsList();
+            _allUsersCache = await _apiService.GetUsersAsync() ?? new List<UserModel>();
+            _allPetsCache = await _apiService.GetAllPetsAsync() ?? new List<PetModel>();
         }
 
         private async void LoadClientsButton_Click(object sender, RoutedEventArgs e)
@@ -96,7 +111,6 @@ namespace Client
 
         private async void AddPetButton_Click(object sender, RoutedEventArgs e)
         {
-            // Проверяем, что выбран клиент, для которого добавляем питомца.
             if (ClientsListView.SelectedItem is not ClientModel selectedClient)
             {
                 MessageBox.Show("Пожалуйста, сначала выберите клиента-владельца.", "Информация");
@@ -148,6 +162,53 @@ namespace Client
         {
             var pets = await _apiService.GetPetsForClientAsync(clientId);
             PetsListView.ItemsSource = pets;
+        }
+
+        private async void AddAppointmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            var editorWindow = new AppointmentEditorWindow(_allPetsCache, _allUsersCache);
+            if (editorWindow.ShowDialog() == true)
+            {
+                await _apiService.AddAppointmentAsync(editorWindow.Appointment);
+                await RefreshAppointmentsList();
+            }
+        }
+
+        private async void EditAppointmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (AppointmentsListView.SelectedItem is not AppointmentModel selectedAppointment)
+            {
+                MessageBox.Show("Пожалуйста, выберите запись для редактирования.", "Информация");
+                return;
+            }
+
+            var editorWindow = new AppointmentEditorWindow(_allPetsCache, _allUsersCache, selectedAppointment);
+            if (editorWindow.ShowDialog() == true)
+            {
+                await _apiService.UpdateAppointmentAsync(editorWindow.Appointment);
+                await RefreshAppointmentsList();
+            }
+        }
+
+        private async void DeleteAppointmentButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (AppointmentsListView.SelectedItem is not AppointmentModel selectedAppointment)
+            {
+                MessageBox.Show("Пожалуйста, выберите запись для удаления.", "Информация");
+                return;
+            }
+
+            if (MessageBox.Show($"Удалить запись #{selectedAppointment.Id}?", "Подтверждение", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                await _apiService.DeleteAppointmentAsync(selectedAppointment.Id);
+                await RefreshAppointmentsList();
+            }
+        }
+
+        private async Task RefreshAppointmentsList()
+        {
+            var appointments = await _apiService.GetAppointmentsAsync();
+            AppointmentsListView.ItemsSource = appointments;
         }
     }
 }
