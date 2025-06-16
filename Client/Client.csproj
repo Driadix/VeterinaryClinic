@@ -9,6 +9,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\Новая папка\**" />
+    <EmbeddedResource Remove="Services\Новая папка\**" />
+    <None Remove="Services\Новая папка\**" />
+    <Page Remove="Services\Новая папка\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Net.Http.Json" Version="9.0.6" />
   </ItemGroup>
 

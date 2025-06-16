@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Client.Services;
 using ClientModel = Core.Models.Client;
@@ -209,6 +206,16 @@ namespace Client
         {
             var appointments = await _apiService.GetAppointmentsAsync();
             AppointmentsListView.ItemsSource = appointments;
+        }
+
+        private async void StrategyToggle_Click(object sender, RoutedEventArgs e)
+        {
+            bool useRawSql = StrategyToggle.IsChecked ?? false;
+            _apiService.UseEntityFramework = !useRawSql;
+
+            StrategyTextBlock.Text = _apiService.UseEntityFramework ? "Режим: EF Core" : "Режим: Raw SQL";
+
+            await RefreshAllData();
         }
     }
 }

@@ -7,8 +7,18 @@
         mc:Ignorable="d"
         Title="АИС 'Ветеринарная клиника'" Height="500" Width="900"
         Loaded="Window_Loaded">
-    <Grid>
-        <TabControl>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,10" HorizontalAlignment="Right">
+            <TextBlock x:Name="StrategyTextBlock" Text="Режим: EF Core" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <CheckBox x:Name="StrategyToggle" Content="Исп. Raw SQL" VerticalAlignment="Center" Click="StrategyToggle_Click"/>
+        </StackPanel>
+
+        <TabControl Grid.Row="1">
             <TabItem Header="Клиенты и Питомцы">
                 <Grid Margin="10">
                     <Grid.ColumnDefinitions>

@@ -11,16 +11,23 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-const bool useEntityFramework = false;
+builder.Services.AddScoped<EfStrategy>();
+builder.Services.AddScoped<SqlStrategy>();
 
-if (useEntityFramework)
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<IDataAccessStrategy>(provider =>
 {
-    builder.Services.AddScoped<IDataAccessStrategy, EfStrategy>();
-}
-else
-{
-    builder.Services.AddScoped<IDataAccessStrategy, SqlStrategy>();
-}
+    var httpContextAccessor = provider.GetRequiredService<IHttpContextAccessor>();
+    var strategyHeader = httpContextAccessor.HttpContext?.Request.Headers["X-Data-Access-Strategy"].FirstOrDefault();
+
+    if (strategyHeader == "RawSQL")
+    {
+        return provider.GetRequiredService<SqlStrategy>();
+    }
+
+    return provider.GetRequiredService<EfStrategy>();
+});
 
 builder.Services.AddScoped<ClinicService>();
 
