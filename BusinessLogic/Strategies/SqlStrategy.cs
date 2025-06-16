@@ -29,7 +29,10 @@ public class SqlStrategy : IDataAccessStrategy
     {
         return new AppointmentSqlRepository(_connectionString);
     }
-    public IRepository<User> GetUserRepository() => throw new NotImplementedException();
+    public IRepository<User> GetUserRepository()
+    {
+        return new UserSqlRepository(_connectionString);
+    }
 
     public Task<int> SaveChangesAsync()
     {

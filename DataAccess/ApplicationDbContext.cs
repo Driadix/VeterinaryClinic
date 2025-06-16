@@ -28,12 +28,6 @@ namespace DataAccess
             modelBuilder.Entity<User>()
                 .HasIndex(u => u.Username)
                 .IsUnique();
-
-            modelBuilder.Entity<User>().HasData(
-            new User { Id = 1, Username = "Иванов Иван Иванович", PasswordHash = "placeholder_hash" },
-            new User { Id = 2, Username = "Петров Петр Петрович", PasswordHash = "placeholder_hash" },
-            new User { Id = 3, Username = "Сидорова Анна Викторовна", PasswordHash = "placeholder_hash" }
-        );
         }
     }
 }

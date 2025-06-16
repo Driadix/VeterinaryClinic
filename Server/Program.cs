@@ -46,5 +46,6 @@ app.MapClientEndpoints();
 app.MapPetEndpoints();
 app.MapAppointmentEndpoints();
 app.MapUserEndpoints();
+app.MapAuthEndpoints();
 
 app.Run();
