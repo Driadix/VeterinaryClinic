@@ -18,8 +18,8 @@
         <PasswordBox x:Name="PasswordBox" Grid.Row="2" Margin="0,30,0,0"/>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,15,0,0">
-            <Button Content="Регистрация" Width="100" Click="RegisterButton_Click"/>
-            <Button Content="Вход" Width="100" Margin="10,0,0,0" IsDefault="True" Click="LoginButton_Click"/>
+            <Button Name="RegisterButton" Content="Регистрация" Width="100" Click="RegisterButton_Click"/>
+            <Button Name="LoginButton" Content="Вход" Width="100" Margin="10,0,0,0" IsDefault="True" Click="LoginButton_Click"/>
         </StackPanel>
     </Grid>
 </Window>
