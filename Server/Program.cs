@@ -4,13 +4,24 @@ using Core.Interfaces;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Server.Endpoints;
+using VeterinaryClinic.BusinessLogic.Strategies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IDataAccessStrategy, EfStrategy>();
+const bool useEntityFramework = false;
+
+if (useEntityFramework)
+{
+    builder.Services.AddScoped<IDataAccessStrategy, EfStrategy>();
+}
+else
+{
+    builder.Services.AddScoped<IDataAccessStrategy, SqlStrategy>();
+}
+
 builder.Services.AddScoped<ClinicService>();
 
 builder.Services.AddEndpointsApiExplorer();
